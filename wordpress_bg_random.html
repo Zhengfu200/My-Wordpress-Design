@@ -1,0 +1,107 @@
+<video id="bg_day_vd" class="bg-video" autoplay="" loop="loop" muted="">
+    <source src="https://cdn.fastly.steamstatic.com/steamcommunity/public/images/items/1239690/ff2ca1b0c316802d94f902c187576fc1a39bde90.webm" />
+</video>
+
+<video id="preload_vd" preload="auto" style="display: none;">
+    <source src=" " />
+</video>
+<style>
+    video.bg-video {
+        position: fixed;
+        z-index: -1;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover;
+        pointer-events: none;
+    }
+
+    html.darkmode video.bg-video.bg-video-day {
+        opacity: 0;
+    }
+
+    html.darkmode video.bg-video.bg-video-night {
+        opacity: 1;
+    }
+
+    video.bg-video.bg-video-day {
+        opacity: 1;
+    }
+
+    video.bg-video.bg-video-night {
+        opacity: 0;
+    }
+
+    #banner,
+    #banner .shape {
+        background: transparent !important;
+    }
+</style>
+<script>
+    window.onload = function () {
+        const bg_day = document.getElementById("bg_day_vd");
+        const preload_video = document.getElementById("preload_vd");
+        const bg_night = document.getElementById("bg_night_vd");
+        const day_sources = [
+            "https://cdn.fastly.steamstatic.com/steamcommunity/public/images/items/1239690/ff2ca1b0c316802d94f902c187576fc1a39bde90.webm",
+            "https://cdn.fastly.steamstatic.com/steamcommunity/public/images/items/874400/c6ec1e32708cb1e403a4c79db03b0128e080e1e8.webm",
+            "https://cdn.fastly.steamstatic.com/steamcommunity/public/images/items/2855140/44607aab956016c08fe4449861774a9804188fa7.webm",
+            "https://cdn.fastly.steamstatic.com/steamcommunity/public/images/items/1091500/4dcf2fa33efef71e8705d2a061af1cf7156574a4.webm",
+            "https://cdn.fastly.steamstatic.com/steamcommunity/public/images/items/2256790/b345029c02a5f35176b867827aecc26ed3b4ba2d.webm",
+            "https://cdn.fastly.steamstatic.com/steamcommunity/public/images/items/1985960/353808e642a47043ce3fb6e40f870e2d22d32a1f.webm",
+            "https://cdn.fastly.steamstatic.com/steamcommunity/public/images/items/1091500/75b1a9153e13599d66d16853be815a6f1fffaeeb.webm",
+            "https://cdn.fastly.steamstatic.com/steamcommunity/public/images/items/1465660/6f0c3c0d89b37e1d0fbdd805f114eb359dc0e539.webm",
+            "https://cdn.fastly.steamstatic.com/steamcommunity/public/images/items/1028570/282e21120b10af252007048d730227347a21a167.webm",
+            "https://cdn.fastly.steamstatic.com/steamcommunity/public/images/items/2196160/25627a56c6b0ff9d2eac25e46d11ff19171dfb77.webm",
+
+        ];
+        const night_sources = [
+            "https://cdn.fastly.steamstatic.com/steamcommunity/public/images/items/2322010/ad2ca3634c56ebd077ac05b6b51b849fd8ee37c9.webm",
+            "https://cdn.fastly.steamstatic.com/steamcommunity/public/images/items/2196160/5b5c5ee2a62d7cfdab9e8f8145f36bc95db21837.webm",
+            "https://cdn.fastly.steamstatic.com/steamcommunity/public/images/items/1239690/7139442c6a17a69fedc49299fa9aadde97271478.webm",
+            "https://cdn.fastly.steamstatic.com/steamcommunity/public/images/items/2322010/020e5b69ac509aace5e86bb2f8a7c9d3576f9039.webm",
+            "https://cdn.fastly.steamstatic.com/steamcommunity/public/images/items/2196160/3bf152c4b42f4908962364e3d6531199116c3ef8.webm",
+            "https://cdn.fastly.steamstatic.com/steamcommunity/public/images/items/1091500/4dcf2fa33efef71e8705d2a061af1cf7156574a4.webm",
+            "https://cdn.fastly.steamstatic.com/steamcommunity/public/images/items/2256790/b345029c02a5f35176b867827aecc26ed3b4ba2d.webm",
+            "https://cdn.fastly.steamstatic.com/steamcommunity/public/images/items/1091500/75b1a9153e13599d66d16853be815a6f1fffaeeb.webm",
+            "https://cdn.fastly.steamstatic.com/steamcommunity/public/images/items/1239690/09c56c4e74c711142f8a4c26a3441c7580c60a43.webm",
+            "https://cdn.fastly.steamstatic.com/steamcommunity/public/images/items/504400/6b570a8ece2b844f3a8724da571cd6b527a4793c.webm",
+            "https://cdn.fastly.steamstatic.com/steamcommunity/public/images/items/504400/6b570a8ece2b844f3a8724da571cd6b527a4793c.webm"
+        ];
+
+        function isDayTime(){
+            const currentHours = new Date().getHours();
+            return currentHours >= 6 && currentHours < 18;
+        }
+        function getNextSource(){
+            const sources = isDayTime() ? day_sources : night_sources;
+            return sources[Math.floor(Math.random() * sources.length)];
+        }
+
+        let nextIndex = getNextSource();
+        preload_video.querySelector("source").src = nextIndex;
+        preload_video.load();
+
+        function switchVideo() {
+            bg_day.querySelector("source").src = preload_video.querySelector("source").src;
+            bg_day.load();
+
+            nextIndex = Math.floor(Math.random() * day_sources.length);
+            preload_video.querySelector("source").src = day_sources[nextIndex];
+            preload_video.load();
+        }
+        setInterval(switchVideo, 60000);
+    };
+
+</script>
+<script src="https://api.gcxstudio.cn/odometer/odometer.min.js"
+    integrity="sha256-65R1G5irU1VT+k8L4coqgd3saSvO/Wufson/w+v2Idw=" crossorigin="anonymous"></script>
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+
+<div id='aplayer'></div>
