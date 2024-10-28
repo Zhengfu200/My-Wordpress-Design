@@ -1,5 +1,5 @@
 <video id="bg_day_vd" class="bg-video" autoplay="" loop="loop" muted="">
-    <source src="https://cdn.fastly.steamstatic.com/steamcommunity/public/images/items/1239690/ff2ca1b0c316802d94f902c187576fc1a39bde90.webm" />
+    <source src=" " />
 </video>
 
 <video id="preload_vd" preload="auto" style="display: none;">
@@ -17,6 +17,7 @@
         height: 100vh;
         object-fit: cover;
         pointer-events: none;
+        transition: opacity 1s ease-in-out; /* 添加透明度过渡效果 */
     }
 
     html.darkmode video.bg-video.bg-video-day {
@@ -72,11 +73,11 @@
             "https://cdn.fastly.steamstatic.com/steamcommunity/public/images/items/504400/6b570a8ece2b844f3a8724da571cd6b527a4793c.webm"
         ];
 
-        function isDayTime(){
+        function isDayTime() {
             const currentHours = new Date().getHours();
             return currentHours >= 6 && currentHours < 18;
         }
-        function getNextSource(){
+        function getNextSource() {
             const sources = isDayTime() ? day_sources : night_sources;
             return sources[Math.floor(Math.random() * sources.length)];
         }
@@ -86,14 +87,23 @@
         preload_video.load();
 
         function switchVideo() {
-            bg_day.querySelector("source").src = preload_video.querySelector("source").src;
-            bg_day.load();
+            bg_day.style.opacity = 0;
+            setTimeout(() => {
+                bg_day.querySelector("source").src = preload_video.querySelector("source").src;
+                bg_day.load();
+                bg_day.style.opacity = 1; // 开始淡入
+            }, 1000); // 1秒的淡出时间
 
             nextIndex = Math.floor(Math.random() * day_sources.length);
             preload_video.querySelector("source").src = day_sources[nextIndex];
             preload_video.load();
         }
-        setInterval(switchVideo, 60000);
+        // 延迟首次执行 switchVideo 30 秒
+        setTimeout(() => {
+            switchVideo();
+            // 在初始延迟后开始间隔执行
+            setInterval(switchVideo, 30000);
+        });
     };
 
 </script>
