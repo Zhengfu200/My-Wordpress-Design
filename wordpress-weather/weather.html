@@ -1,0 +1,42 @@
+<script>
+    const apiUrl = 'https://api.seniverse.com/v3/weather/now.json?key=SRcP96opaDD9zO9_1&location=beijing&language=zh-Hans&unit=c'
+
+    async function fetchData(apiUrl){
+        try{
+            const response = await fetch(apiUrl);
+            if(!response.ok){
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            console.log('获取的数据',data);
+            return data;
+        }catch(error){
+            console.error('Error:', error);
+        }
+    }
+
+    async function updateWeather(){
+        const weatherData = await fetchData(apiUrl);
+        const weatherSpan = document.getElementById('weather-display');
+        
+        if (weatherData && weatherData.results && weatherData.results[0]) {
+            const result = weatherData.results[0];
+            const weatherInfo = `
+                城市: ${result.location.name}
+                国家: ${result.location.country}
+                TimeZone: ${result.location.timezone}
+                TimeZone_Offset: ${result.location.timezone_offset}
+                天气: ${result.now.text}
+                返回码: ${result.now.code}
+                温度: ${result.now.temperature}
+            `;
+            weatherSpan.textContent = weatherInfo;
+        } else {
+            weatherSpan.textContent = '无法获取天气数据';
+        }
+    }
+    
+    updateWeather();
+</script>
+
+<span id="weather-display" style="white-space: pre-wrap;">正在加载天气数据</span>
