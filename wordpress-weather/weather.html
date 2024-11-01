@@ -1,10 +1,12 @@
 <script>
     const apiUrl = 'https://api.seniverse.com/v3/weather/now.json?key=SRcP96opaDD9zO9_1&location=xiamen&language=zh-Hans&unit=c'
+    const hitokoto = 'https://v1.hitokoto.cn/'
 
     async function fetchData(apiUrl){
         try{
             const response = await fetch(apiUrl);
-            if(!response.ok){
+            const respose_2 = await fetch(hitokoto);
+            if(!response.ok||!respose_2.ok){
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const data = await response.json();
@@ -17,17 +19,30 @@
 
     async function updateWeather(){
         const weatherData = await fetchData(apiUrl);
+        const hitokoto_Data = await fetchData(hitokoto);
         const weatherSpan = document.getElementById('weather-display');
         
         if (weatherData && weatherData.results && weatherData.results[0]) {
             const result = weatherData.results[0];
+            const hitokoto_result = hitokoto_Data.results[0];
             let weatherMain = null;
             switch(result.now.code){
                 case '1': weatherMain = '晴';break;
-                case '1': weatherMain = '夜晚晴';break;
+                case '2': weatherMain = '夜晚晴';break;
+                case '4': weatherMain = '多云';break;
+                case '5': weatherMain = '晴间多云';break;
+                case '6': weatherMain = '夜晚晴间多云';break;
+                case '7': weatherMain = '大部多云';break;
+                case '8': weatherMain = '夜晚大部多云';break;
+                case '9': weatherMain = '阴';break;
+                case '10': weatherMain = '阵雨';break;
+                case '11': weatherMain = '雷阵雨';break;
+                case '12': weatherMain = '雷阵雨伴有冰雹';break;
+                case '13': weatherMain = '小雨';break;
                 default: weatherMain = '未知';break;
             }
             const weatherInfo = `
+                每日一言: ${hitokoto_result.hitokoto}
                 城市: ${result.location.name}
                 国家: ${result.location.country}
                 天气码: ${result.now.code}
